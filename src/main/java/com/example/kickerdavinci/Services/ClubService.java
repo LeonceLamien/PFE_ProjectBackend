@@ -48,10 +48,16 @@ public class ClubService {
   }
 
   public boolean update(Club club, String name) {
-    if (clubsRepository.existsByName(club.getName())) {
+    if (club == null || club.getName() == null) {
+      return false;
+    }
+    if (!name.equals(club.getName()) && clubsRepository.existsByName(club.getName())) {
       return false;
     }
     Club clubDb = clubsRepository.findByName(name);
+    if (clubDb == null) {
+      return false;
+    }
     club.setId(clubDb.getId());
     clubsRepository.save(club);
     System.out.println(clubsRepository.findAll());

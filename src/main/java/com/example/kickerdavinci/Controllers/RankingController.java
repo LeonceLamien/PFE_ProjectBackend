@@ -25,8 +25,8 @@ public class RankingController {
 
   @PostMapping("/ranking")
   public ResponseEntity<Void> createOne(@RequestBody NoIdRanking ranking) {
-    if (ranking.getName() == null || ranking.getName().equals("") || ranking.getMaxPoints() <= 0
-        || ranking.getMinPoints() <= 0) {
+    if (ranking == null || ranking.getName() == null || ranking.getName().isBlank()
+        || ranking.getMaxPoints() <= 0 || ranking.getMinPoints() <= 0) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!rankingService.createOne(ranking)) {
@@ -37,7 +37,7 @@ public class RankingController {
 
   @GetMapping("/ranking/{name}")
   public ResponseEntity<Ranking> getOne(@PathVariable String name) {
-    if (name == null || name.equals("")) {
+    if (name == null || name.isBlank()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     Ranking ranking = rankingService.getOne(name);
@@ -54,7 +54,7 @@ public class RankingController {
 
   @DeleteMapping("/ranking/{name}")
   public ResponseEntity<Void> deleteByName(@PathVariable String name) {
-    if (name == null || name.equals("")) {
+    if (name == null || name.isBlank()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!rankingService.deleteByName(name)) {
@@ -66,8 +66,8 @@ public class RankingController {
   @PutMapping("/ranking/{name}")
   public ResponseEntity<Void> updateRanking(@RequestBody NoIdRanking ranking,
       @PathVariable String name) {
-    if (ranking.getName() == null || ranking.getName().equals("") || ranking.getMaxPoints() <= 0
-        || ranking.getMinPoints() <= 0) {
+    if (ranking == null || ranking.getName() == null || ranking.getName().isBlank()
+        || ranking.getMaxPoints() <= 0 || ranking.getMinPoints() <= 0) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!rankingService.existsName(name)) {

@@ -28,12 +28,11 @@ public class UserController {
 
   @PostMapping("/user")
   public ResponseEntity<Void> createUser(@RequestBody NoIdUser user) {
-    if (user.getLastname() == null || user.getLastname().equals("") || user.getFirstname() == null
-        || user.getFirstname().equals("") || user.getEmail() == null || user.getEmail()
-        .equals("")
-        || user.getPassword() == null || user.getPassword().equals("") || user.getBirthDate()
-        .isAfter(
-            LocalDate.now())) {
+    if (user == null || user.getLastname() == null || user.getLastname().isBlank()
+        || user.getFirstname() == null || user.getFirstname().isBlank()
+        || user.getEmail() == null || user.getEmail().isBlank()
+        || user.getPassword() == null || user.getPassword().isBlank()
+        || user.getBirthDate() == null || user.getBirthDate().isAfter(LocalDate.now())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!userService.createOne(user)) {
@@ -45,17 +44,19 @@ public class UserController {
   @PutMapping("/user/{email}")
   public ResponseEntity<Void> updateUser(@RequestBody NoIdUser user, @PathVariable String email,
       @RequestHeader("Authorization") String token) {
+    if (email == null || email.isBlank()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
     String userVerified = userService.verify(token);
-    if (!userVerified.equals(email)) {
+    if (userVerified == null || !userVerified.equals(email)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 
-    if (user.getLastname() == null || user.getLastname().equals("") || user.getFirstname() == null
-        || user.getFirstname().equals("") || user.getEmail() == null || user.getEmail()
-        .equals("")
-        || user.getPassword() == null || user.getPassword().equals("") || user.getBirthDate()
-        .isAfter(
-            LocalDate.now()) /*|| user.getClub() == null*/ || email.equals(user.getEmail())) {
+    if (user == null || user.getLastname() == null || user.getLastname().isBlank()
+        || user.getFirstname() == null || user.getFirstname().isBlank()
+        || user.getEmail() == null || user.getEmail().isBlank()
+        || user.getPassword() == null || user.getPassword().isBlank()
+        || user.getBirthDate() == null || user.getBirthDate().isAfter(LocalDate.now())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!userService.existsEmail(email)) {
@@ -70,10 +71,8 @@ public class UserController {
 
   @PostMapping("/authentication/connect")
   public String connect(@RequestBody Credentials credentials) {
-    if (credentials.getEmail() == null || credentials.getPassword() == null
-        || credentials.getPassword()
-        .equals("") || credentials.getEmail()
-        .equals("")) {
+    if (credentials == null || credentials.getEmail() == null || credentials.getPassword() == null
+        || credentials.getPassword().isBlank() || credentials.getEmail().isBlank()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     String token = userService.connect(credentials);

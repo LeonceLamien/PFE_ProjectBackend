@@ -34,21 +34,15 @@ public class ClubController {
 
   @PostMapping("/club")
   public ResponseEntity<Void> createOne(@RequestBody NoIdClub club) {
-    if (club.getName() == null || club.getName().equals("") || club.getAdresse() == null
-        || club.getAdresse().equals("")
-        || club.getLocal() == null || club.getLocal().equals("") || club.getPhone() == null
-        || club.getPhone().equals("")
-        || club.getCaptainPhone() == null || club.getCaptainPhone().equals("")) {
+    if (club == null || club.getName() == null || club.getName().isBlank() || club.getAdresse() == null
+        || club.getAdresse().isBlank() || club.getLocal() == null || club.getLocal().isBlank()
+        || club.getPhone() == null || club.getPhone().isBlank() || club.getCaptainPhone() == null
+        || club.getCaptainPhone().isBlank() || club.getCaptain() == null || club.getDivision() == null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!userService.existsEmail(club.getCaptain().getEmail())) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This user doesn't exist");
-    } /*else {
-      if (!club.getName().equals(club.getCaptain().getClub().getName())) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This user is not in this club");
-      }
     }
-    */
     if (!divisionService.existsName(club.getDivision().getName())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This division doesn't exist");
     }
@@ -65,7 +59,7 @@ public class ClubController {
 
   @GetMapping("/club/{name}")
   public ResponseEntity<Club> getClubByName(@PathVariable String name) {
-    if (name.equals("") || name == null) {
+    if (name == null || name.isBlank()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     Club club = clubService.getClubByName(name);
@@ -78,7 +72,7 @@ public class ClubController {
 
   @DeleteMapping("/club/{name}")
   public ResponseEntity<Void> deleteByName(@PathVariable String name) {
-    if (name.equals("") || name == null) {
+    if (name == null || name.isBlank()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!clubService.deleteByName(name)) {
@@ -90,21 +84,15 @@ public class ClubController {
   @PutMapping("/club/{name}")
   public ResponseEntity<Void> updateDivision(@RequestBody NoIdClub club,
       @PathVariable String name) {
-    if (club.getName() == null || club.getName().equals("") || club.getAdresse() == null
-        || club.getAdresse().equals("")
-        || club.getLocal() == null || club.getLocal().equals("") || club.getPhone() == null
-        || club.getPhone().equals("")
-        || club.getCaptainPhone() == null || club.getCaptainPhone().equals("")) {
+    if (club == null || club.getName() == null || club.getName().isBlank() || club.getAdresse() == null
+        || club.getAdresse().isBlank() || club.getLocal() == null || club.getLocal().isBlank()
+        || club.getPhone() == null || club.getPhone().isBlank() || club.getCaptainPhone() == null
+        || club.getCaptainPhone().isBlank() || club.getCaptain() == null || club.getDivision() == null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!userService.existsEmail(club.getCaptain().getEmail())) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This user doesn't exist");
-    } /*else {
-      if (!club.getName().equals(club.getCaptain().getClub().getName())) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This user is not in this club");
-      }
     }
-    */
     if (!divisionService.existsName(club.getDivision().getName())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This division doesn't exist");
     }

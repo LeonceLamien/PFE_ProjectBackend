@@ -46,10 +46,16 @@ public class DivisionService {
   }
 
   public boolean update(Division division, String name) {
-    if (divisionsRepository.existsByName(division.getName())) {
+    if (division == null || division.getName() == null) {
+      return false;
+    }
+    if (!name.equals(division.getName()) && divisionsRepository.existsByName(division.getName())) {
       return false;
     }
     Division divisionDb = divisionsRepository.findByName(name);
+    if (divisionDb == null) {
+      return false;
+    }
     division.setId(divisionDb.getId());
     divisionsRepository.save(division);
     System.out.println(divisionsRepository.findAll());

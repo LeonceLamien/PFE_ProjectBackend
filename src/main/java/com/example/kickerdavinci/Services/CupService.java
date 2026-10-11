@@ -65,10 +65,16 @@ public class CupService {
   }
 
   public boolean update(Cup cup, String name) {
-    if (cupsRepository.existsByName(cup.getName())) {
+    if (cup == null || cup.getName() == null) {
+      return false;
+    }
+    if (!name.equals(cup.getName()) && cupsRepository.existsByName(cup.getName())) {
       return false;
     }
     Cup cupDb = cupsRepository.findByName(name);
+    if (cupDb == null) {
+      return false;
+    }
     cup.setId(cupDb.getId());
     cupsRepository.save(cup);
     System.out.println(cupsRepository.findAll());

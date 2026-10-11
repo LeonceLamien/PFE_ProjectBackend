@@ -21,6 +21,13 @@ public class GameService {
   }
 
   public boolean createOne(NoIdGame game) {
+    if (game == null || game.getHostClub() == null || game.getGuestClub() == null) {
+      return false;
+    }
+    if (game.getHostClub().equals(game.getGuestClub())) {
+      return false;
+    }
+    gameRepository.save(game.toGame());
     return true;
   }
 

@@ -57,10 +57,16 @@ public class UserService {
   }
 
   public boolean update(User user, String email) {
-    if (usersRepository.existsByEmail(user.getEmail())) {
+    if (user == null || user.getEmail() == null || user.getPassword() == null) {
+      return false;
+    }
+    if (!email.equals(user.getEmail()) && usersRepository.existsByEmail(user.getEmail())) {
       return false;
     }
     User userDb = findUser(email);
+    if (userDb == null) {
+      return false;
+    }
     user.setId(userDb.getId());
     user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
     usersRepository.save(user);
@@ -83,9 +89,12 @@ public class UserService {
   }
 
   public String verify(String token) {
+    if (token == null || token.isBlank()) {
+      return null;
+    }
     try {
-      String email = jwtVerifier.verify(token).getClaim("pseudo").asString();
-      if (!usersRepository.existsByEmail(email)) return null;
+      String email = jwtVerifier.verify(token).getClaim("email").asString();
+      if (email == null || !usersRepository.existsByEmail(email)) return null;
       return email;
     } catch (JWTVerificationException e) {
       return null;

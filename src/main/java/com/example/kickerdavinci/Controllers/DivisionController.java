@@ -45,7 +45,7 @@ public class DivisionController {
 
   @PostMapping("/division")
   public ResponseEntity<Void> createOne(@RequestBody NoIdDivision division) {
-    if (division.getName() == null || division.getName().equals("")) {
+    if (division == null || division.getName() == null || division.getName().isBlank()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!divisionService.createOne(division)) {
@@ -62,7 +62,7 @@ public class DivisionController {
 
   @DeleteMapping("/division/{name}")
   public ResponseEntity<Void> deleteByName(@PathVariable String name) {
-    if (name == null || name.equals("")) {
+    if (name == null || name.isBlank()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!divisionService.deleteByName(name)) {
@@ -74,7 +74,7 @@ public class DivisionController {
   @PutMapping("/division/{name}")
   public ResponseEntity<Void> updateDivision(@RequestBody NoIdDivision division,
       @PathVariable String name) {
-    if (division.getName() == null || division.getName().equals("")) {
+    if (division == null || division.getName() == null || division.getName().isBlank()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!divisionService.existsName(name)) {

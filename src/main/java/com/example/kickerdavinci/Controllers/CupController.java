@@ -30,9 +30,8 @@ public class CupController {
 
   @PostMapping("/cup")
   public ResponseEntity<Void> createOne(@RequestBody NoIdCup cup) {
-    if (cup.getStartDate() == null || cup.getEndDate() == null || cup.getName() == null
-        || cup.getName()
-        .equals("") || cup.getEndDate().isBefore(cup.getStartDate())) {
+    if (cup == null || cup.getStartDate() == null || cup.getEndDate() == null || cup.getName() == null
+        || cup.getName().isBlank() || cup.getEndDate().isBefore(cup.getStartDate())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!cupService.createOne(cup)) {
@@ -43,7 +42,7 @@ public class CupController {
 
   @GetMapping("/cup/{name}")
   public ResponseEntity<Cup> getOne(@PathVariable String name) {
-    if (name == null || name.equals("")) {
+    if (name == null || name.isBlank()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     Cup cup = cupService.getOne(name);
@@ -73,7 +72,7 @@ public class CupController {
 
   @DeleteMapping("/cup/{name}")
   public ResponseEntity<Void> deleteByName(@PathVariable String name) {
-    if (name == null || name.equals("")) {
+    if (name == null || name.isBlank()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!cupService.deleteByName(name)) {
@@ -84,9 +83,8 @@ public class CupController {
 
   @PutMapping("/cup/{name}")
   public ResponseEntity<Void> updateUser(@RequestBody NoIdCup cup, @PathVariable String name) {
-    if (cup.getStartDate() == null || cup.getEndDate() == null || cup.getName() == null
-        || cup.getName()
-        .equals("") || cup.getEndDate().isBefore(cup.getStartDate())) {
+    if (cup == null || cup.getStartDate() == null || cup.getEndDate() == null || cup.getName() == null
+        || cup.getName().isBlank() || cup.getEndDate().isBefore(cup.getStartDate())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!cupService.existsName(name)) {

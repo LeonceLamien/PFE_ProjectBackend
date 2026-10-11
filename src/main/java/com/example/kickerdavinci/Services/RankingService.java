@@ -46,10 +46,16 @@ public class RankingService {
   }
 
   public boolean update(Ranking ranking, String name) {
-    if (rankingsRepository.existsByName(ranking.getName())) {
+    if (ranking == null || ranking.getName() == null) {
+      return false;
+    }
+    if (!name.equals(ranking.getName()) && rankingsRepository.existsByName(ranking.getName())) {
       return false;
     }
     Ranking divisionDb = rankingsRepository.findByName(name);
+    if (divisionDb == null) {
+      return false;
+    }
     ranking.setId(divisionDb.getId());
     rankingsRepository.save(ranking);
     System.out.println(rankingsRepository.findAll());

@@ -26,9 +26,9 @@ public class CompetitionController {
 
   @PostMapping("/competition")
   public ResponseEntity<Void> createOne(@RequestBody NoIdCompetition competition) {
-    if (competition.getMaxSlots() <= 0 || competition.getNote() == null || competition.getNote()
-        .equals("") || competition.getDate().isBefore(
-        LocalDate.now())) {
+    if (competition == null || competition.getMaxSlots() <= 0 || competition.getNote() == null
+        || competition.getNote().isBlank() || competition.getDate() == null
+        || competition.getDate().isBefore(LocalDate.now())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!competitionService.createOne(competition)) {
@@ -44,17 +44,19 @@ public class CompetitionController {
 
   @GetMapping("/competitions/{date}")
   public ResponseEntity<Competition> getCompetitionByDate(@PathVariable LocalDate date) {
+    if (date == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
     Competition competition = competitionService.getCompetitionByDate(date);
     if (competition == null) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
-    return new ResponseEntity<>(competitionService.getCompetitionByDate(date), HttpStatus.OK);
+    return new ResponseEntity<>(competition, HttpStatus.OK);
   }
 
   @DeleteMapping("/competition/{date}")
   public ResponseEntity<Void> deleteByName(@PathVariable LocalDate date) {
-    if (date.isBefore(
-        LocalDate.now())) {
+    if (date == null || date.isBefore(LocalDate.now())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!competitionService.deleteByDate(date)) {
@@ -66,9 +68,9 @@ public class CompetitionController {
   @PutMapping("/competition/{date}")
   public ResponseEntity<Void> updateDivision(@RequestBody NoIdCompetition competition,
       @PathVariable LocalDate date) {
-    if (competition.getMaxSlots() <= 0 || competition.getNote() == null || competition.getNote()
-        .equals("") || competition.getDate().isBefore(
-        LocalDate.now())) {
+    if (competition == null || competition.getMaxSlots() <= 0 || competition.getNote() == null
+        || competition.getNote().isBlank() || competition.getDate() == null
+        || competition.getDate().isBefore(LocalDate.now())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     if (!competitionService.existsDate(date)) {

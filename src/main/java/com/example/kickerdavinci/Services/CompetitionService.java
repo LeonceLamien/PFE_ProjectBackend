@@ -48,10 +48,16 @@ public class CompetitionService {
   }
 
   public boolean update(Competition competition, LocalDate date) {
-    if (competitionsRepository.existsByDate(competition.getDate())) {
+    if (competition == null || competition.getDate() == null) {
+      return false;
+    }
+    if (!date.equals(competition.getDate()) && competitionsRepository.existsByDate(competition.getDate())) {
       return false;
     }
     Competition competitionDb = competitionsRepository.findByDate(date);
+    if (competitionDb == null) {
+      return false;
+    }
     competition.setId(competitionDb.getId());
     competitionsRepository.save(competition);
     System.out.println(competitionsRepository.findAll());
